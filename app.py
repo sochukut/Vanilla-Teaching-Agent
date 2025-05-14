@@ -11,10 +11,9 @@ model = genai.GenerativeModel('gemini-1.5-flash')
 # Page layout
 st.divider()
 st.markdown("## About somaGPT")
-st.markdown(
-    """SomaGPT is a platform for learning programming in a Socratic manner.\n
-    It uses foundational LLMs such as GPT and Gemini.\n
-    Instead of the LLM giving you answers, it instructs you in an adaptive way by leveraging your prior knowledge."""
+st.write(
+    "SomaGPT is a platform for learning programming in a Socratic manner. It uses foundational LLMs such as GPT and Gemini.
+    Instead of the LLM giving you answers, it instructs you in an adaptive way by leveraging your prior knowledge."
 )
 st.divider()
 st.title("OOP Programming Instructor")
