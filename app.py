@@ -11,7 +11,6 @@ api_key = st.secrets["api_keys"]["GEMINI_API_KEY"]
 #api_key = os.getenv("GEMINI_API_KEY")
 genai.configure(api_key=api_key)
 
-genai.configure(api_key=api_key)
 model = genai.GenerativeModel('gemini-1.5-flash')
 
 st.divider()
@@ -42,7 +41,7 @@ for msg in st.session_state.chat_history:
         st.markdown(msg["parts"][0])
 
 # User input
-user_input = st.chat_input("Say something")
+user_input = st.chat_input(" ")
 
 if user_input:
     # Append user message using correct Gemini format
