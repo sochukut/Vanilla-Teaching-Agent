@@ -1,77 +1,49 @@
 import streamlit as st
 import google.generativeai as genai
-import os
-from dotenv import load_dotenv
 
-# Load the .env file
-#load_dotenv()
-
-# Get the key from environment
+# Load API key from Streamlit secrets
 api_key = st.secrets["api_keys"]["GEMINI_API_KEY"]
-#api_key = os.getenv("GEMINI_API_KEY")
-genai.configure(api_key=api_key)
 
+# Configure Gemini
+genai.configure(api_key=api_key)
 model = genai.GenerativeModel('gemini-1.5-flash')
 
+# Page layout
 st.divider()
-
-displaytext= ('''## About somaGPT ''')
-
-st.markdown(displaytext)
-
-displaytext= (
-    '''SomaGPT is a platform for learning programming in a socratic manner. \n\n'''
-    '''It uses foundational LLMS such as GPT and Gemini. '''
-    '''Instead of the LLM giving you answers it instructs you in an adaptive way by leveraging on your prior knowledge \n\n'''
-
- )
+st.markdown("## About somaGPT")
+st.markdown(
+    """SomaGPT is a platform for learning programming in a Socratic manner.\n
+    It uses foundational LLMs such as GPT and Gemini.\n
+    Instead of the LLM giving you answers, it instructs you in an adaptive way by leveraging your prior knowledge."""
+)
 st.divider()
-st.markdown(displaytext)
+st.title("OOP Programming Instructor")
+st.write(
+    "I’m glad you want to learn object-oriented concepts. They’re key in programming.\n"
+    "Mastering them will help you become an advanced programmer.\n"
+    "Tell me what topic you want to learn about classes and objects."
+)
 
-st.title("OOP programming instructor")
-st.write("I am glad you want to learn the object oriented concepts. They are a key conecpt in programming. Mastering this will move you from to an advanced programmer. Tell me what topic you want to learn about classes and objects")
+# Initialize chat session
+if "chat" not in st.session_state:
+    st.session_state.chat = model.start_chat(history=[])
 
-# Initialize chat history in session state
-if "chat_history" not in st.session_state:
-    st.session_state.chat_history = []
-
-# Display chat history
-for msg in st.session_state.chat_history:
-    with st.chat_message(msg["role"]):
-        st.markdown(msg["parts"][0])
-
-# User input
-user_input = st.chat_input(" ")
+# User input box
+user_input = st.chat_input("Ask me anything about OOP...")
 
 if user_input:
-    # Append user message using correct Gemini format
-    st.session_state.chat_history.append({
-        "role": "user",
-        "parts": [user_input]
-    })
-
     with st.chat_message("user"):
         st.markdown(user_input)
 
-    # Debug: Check the chat history before sending to Gemini
-    #st.write("Chat History Sent to Model:", st.session_state.chat_history)
-
     try:
-        # Generate response with full chat history
-        response = model.generate_content(st.session_state.chat_history)
+        # Get response from Gemini
+        response = st.session_state.chat.send_message(user_input)
         bot_reply = response.text
 
-        # Check if the response is generated
         if bot_reply:
-            # Append model response using correct Gemini format
-            st.session_state.chat_history.append({
-                "role": "model",
-                "parts": [bot_reply]
-            })
-
             with st.chat_message("model"):
                 st.markdown(bot_reply)
         else:
-            st.error("No response generated. Check API settings.")
+            st.error("Gemini returned no response.")
     except Exception as e:
         st.error(f"Error generating response: {e}")
