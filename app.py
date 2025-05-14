@@ -4,10 +4,11 @@ import os
 from dotenv import load_dotenv
 
 # Load the .env file
-load_dotenv()
+#load_dotenv()
 
 # Get the key from environment
-api_key = os.getenv("GEMINI_API_KEY")
+api_key = st.secrets["api_keys"]["GEMINI_API_KEY"]
+#api_key = os.getenv("GEMINI_API_KEY")
 genai.configure(api_key=api_key)
 
 genai.configure(api_key=api_key)
